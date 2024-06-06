@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 function App() {
 
     return (
-        <BrowserRouter>
+        <BrowserRouter basename='/casino-world'>
             <div className='flex'>
                 <Menu/>
                 <Arena/>
