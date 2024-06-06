@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import Menu from "./components/Menu";
+import Arena from "./components/arena-components/Arena";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Poker from "./components/arena-components/games/Poker";
+import BlackJack from "./components/arena-components/games/BlackJack";
+import Tags from "./components/Tags";
+import TagsLocal from "./components/TagsLocal";
+import {useState} from 'react';
+import PlayButton from "./components/PlayButton";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    return (
+        <BrowserRouter>
+            <div className='flex'>
+                <Menu/>
+                <Arena/>
+                
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;
