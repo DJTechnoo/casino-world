@@ -2,10 +2,10 @@ import { useState } from "react";
 import Tags from "../Tags";
 import PlayButton from "../PlayButton";
 import { Routes, Route } from "react-router-dom";
-import Poker from "./games/Poker";
+import HorseRace from "./games/HorseRace";
 import BlackJack from "./games/BlackJack";
 
-const Arena = ({children}) => {
+const Arena = () => {
 
     const [participants, setParticipants] = useState([]);
     const [prizes, setPrizes] = useState([]);
@@ -19,8 +19,8 @@ const Arena = ({children}) => {
     return <div className='text-white w-auto flex flex-col'>
             <Routes>
                 <Route
-                    path='/poker'
-                    element={<Poker participants={participants} play={play} setPlay={setPlay} setWinner={setWinner}/>} 
+                    path='/horse-race'
+                    element={<HorseRace participants={participants} play={play} setPlay={setPlay} setWinner={setWinner}/>} 
                 />
                 <Route path='/black-jack' element={<BlackJack/>} />
             </Routes>
@@ -36,7 +36,7 @@ const Arena = ({children}) => {
                     className={'text-black  hover:bg-red-600 rounded-2xl px-4 py-1 hover:cursor-pointer'}
                 />
                 <Tags 
-                    name='Pruzes' 
+                    name='Prizes' 
                     tags={prizes}
                     setTags={setPrizes}
                     className='text-black text-4xl bg-cyan-400 rounded-2xl px-4 py-1 hover:cursor-pointer'

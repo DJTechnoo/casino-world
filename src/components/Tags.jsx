@@ -29,7 +29,6 @@ const Tags = (props) => {
     const removeTag = (index) => {
         props.setTags(props.tags.filter((_, i) => i !== index))
     } 
-    debugger;
     // TODO:
     // Put this in a new component to share between Tags and TagsLocal
     // OR: test this component with memo on prizes and participants together like before

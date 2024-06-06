@@ -2,10 +2,11 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useRef, useEffect, memo } from 'react';
 
-const Poker = ({participants, play, setWinner}) => {
+const HorseRace = ({participants, play, setWinner}) => {
     const chartComponent = useRef(null),
         finishLine = 1000,
         animationSpd = 500;
+    let labelWidth = 16;
 
     useEffect(() => {
         if (!play) {
@@ -55,6 +56,10 @@ const Poker = ({participants, play, setWinner}) => {
         return () => clearInterval(interval);
       }, [play, participants]);
 
+    if (chartComponent.current && chartComponent.current.chart.series[0].columnMetrics.width) {
+        labelWidth = chartComponent.current.chart.series[0].columnMetrics.width * 0.5 + 'px'
+    }
+
     const options = {
         chart: {
             width: 1000,
@@ -68,6 +73,21 @@ const Poker = ({participants, play, setWinner}) => {
 
         legend: {
             enabled: false
+        },
+
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    inside: true,
+                    align: 'right',
+                    format: '{point.category}',
+                    style: {
+                        fontSize: labelWidth
+                    }
+                }
+                    
+            }
         },
 
         xAxis: {
@@ -100,4 +120,4 @@ const Poker = ({participants, play, setWinner}) => {
  
 }
 
-export default memo(Poker);
+export default memo(HorseRace);
