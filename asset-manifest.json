@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/casino-world/static/css/main.a8fa6d2d.css",
-    "main.js": "/casino-world/static/js/main.b4788eca.js",
+    "main.js": "/casino-world/static/js/main.83b922aa.js",
     "static/js/453.a098749e.chunk.js": "/casino-world/static/js/453.a098749e.chunk.js",
     "index.html": "/casino-world/index.html",
     "main.a8fa6d2d.css.map": "/casino-world/static/css/main.a8fa6d2d.css.map",
-    "main.b4788eca.js.map": "/casino-world/static/js/main.b4788eca.js.map",
+    "main.83b922aa.js.map": "/casino-world/static/js/main.83b922aa.js.map",
     "453.a098749e.chunk.js.map": "/casino-world/static/js/453.a098749e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a8fa6d2d.css",
-    "static/js/main.b4788eca.js"
+    "static/js/main.83b922aa.js"
   ]
 }
