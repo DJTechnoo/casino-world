@@ -4,7 +4,7 @@ import { useRef, useEffect, memo } from 'react';
 
 const HorseRace = ({participants, play, setWinner}) => {
     const chartComponent = useRef(null),
-        finishLine = 1000,
+        finishLine = 1000000,
         animationSpd = 500;
     let labelWidth = 16;
 
@@ -16,7 +16,8 @@ const HorseRace = ({participants, play, setWinner}) => {
         let boostCounter = -1,
             luckyOne = -1,
             boostAmount = 0,
-            boostPower = 0.2,
+            boostPower = 0.4,
+            candidateIndeces = [],
             winner = '';
 
         const interval = setInterval(() => {
@@ -25,7 +26,7 @@ const HorseRace = ({participants, play, setWinner}) => {
                 if(boostCounter == boostInterval) {
                     luckyOne = Math.floor(Math.random() * data.length);
                     boostCounter = 0;
-                    boostAmount = 3 + Math.floor(Math.random()*3);
+                    boostAmount = 3 + Math.floor(Math.random()*8);
                 }
                 
                 
@@ -39,6 +40,7 @@ const HorseRace = ({participants, play, setWinner}) => {
                     data[i].update(data[i].y *= 1.1 + Math.random()*0.1, false, false, false);
                     if (data[i].y > finishLine) {
                         winner = i;
+                        data[i].update({color: '#03fc4e'}, false, false, false);
                     }
                 }
                 chartComponent.current.chart.redraw();
@@ -62,13 +64,18 @@ const HorseRace = ({participants, play, setWinner}) => {
 
     const options = {
         chart: {
+            backgroundColor: 'rgba(0, 0, 0, 0)',
             width: 1000,
-            height: 550,
+            height: '60%',
             type: 'bar',
             animation: {
                 duration: animationSpd,
                 easing: t => t
-            }
+            },
+        },
+
+        credits: {
+            enabled: false
         },
 
         legend: {
@@ -83,20 +90,34 @@ const HorseRace = ({participants, play, setWinner}) => {
                     align: 'right',
                     format: '{point.category}',
                     style: {
-                        fontSize: labelWidth
+                        fontSize: labelWidth,
+                        textOutline: 'none',
                     }
                 }
-                    
             }
         },
 
         xAxis: {
             categories: participants,
+            labels: {
+                enabled: false
+            }
         },
         yAxis: {
-            plotLines: [{
-                color: 'red',
-                value: finishLine
+           gridLineWidth: 0,
+            labels: {
+                style: {
+                    color: 'white',
+                    fontSize: '1em'
+                }
+            },
+            title: {
+                text: ''
+            },
+            plotBands: [{
+                color: 'rgba(252, 3, 132, 0.2)',
+                from: finishLine,
+                to: finishLine* 2
             }]
         },
         title: {
@@ -105,7 +126,10 @@ const HorseRace = ({participants, play, setWinner}) => {
 
         series: [{
             groupPadding: 0,
-            pointPadding: 0,
+            pointPadding: 0.05,
+            borderWidth: 0,
+            borderRadius: 30,
+            color: '#fc0384',
             data: participants.map(() => 40)
 
         }]
@@ -117,7 +141,6 @@ const HorseRace = ({participants, play, setWinner}) => {
             options={options} 
         />
     </div>
- 
 }
 
 export default memo(HorseRace);

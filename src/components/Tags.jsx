@@ -1,5 +1,3 @@
-
-
 import {useState, memo } from 'react';
 
 const Tags = (props) => {
