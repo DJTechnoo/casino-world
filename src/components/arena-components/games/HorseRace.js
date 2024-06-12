@@ -17,8 +17,9 @@ const HorseRace = ({participants, play, setWinner}) => {
             luckyOne = -1,
             boostAmount = 0,
             boostPower = 0.4,
-            candidateIndeces = [],
-            winner = '';
+            candidateIndices = [],
+            selectWinner = false,
+            winner = -1;
 
         const interval = setInterval(() => {
             if (chartComponent.current && chartComponent.current.chart.series[0].data.length) {
@@ -27,28 +28,44 @@ const HorseRace = ({participants, play, setWinner}) => {
                     luckyOne = Math.floor(Math.random() * data.length);
                     boostCounter = 0;
                     boostAmount = 3 + Math.floor(Math.random()*8);
+                    data[luckyOne].update({color: 'red'}, false, false, false);
                 }
-                
-                
-                if (boostAmount) {
-                    boostAmount--;
-                    data[luckyOne].update(data[luckyOne].y *= 1 + boostPower * Math.random(), false, false, false);
-                } else {
-                    boostCounter++;
-                }
-                for (let i in data) {
-                    data[i].update(data[i].y *= 1.1 + Math.random()*0.1, false, false, false);
-                    if (data[i].y > finishLine) {
-                        winner = i;
-                        data[i].update({color: '#03fc4e'}, false, false, false);
+
+                if (!selectWinner) {
+                    if (boostAmount) {
+                        boostAmount--;
+                        if (boostAmount == 0) {
+                            data[luckyOne].update({color: '#fc0384'}, false, false, false);
+                        }
+                        data[luckyOne].update(data[luckyOne].y *= 1 + boostPower * Math.random(), false, false, false);
+                    } else {
+                        boostCounter++;
                     }
+
+                    for (let i in data) {
+                        data[i].update(data[i].y *= 1.1 + Math.random()*0.1, false, false, false);
+                        if (data[i].y > finishLine) {
+                            selectWinner = true;
+                            candidateIndices.push(i);
+                        }
+                    }
+                } else {
+                    let previousBest = 0;
+                    for (let i in candidateIndices) {
+                        if (data[candidateIndices[i]].y > previousBest) {
+                            previousBest = data[candidateIndices[i]].y;
+                            winner = candidateIndices[i];
+                        }
+                    }
+                    data[luckyOne].update({color: '#fc0384'}, false, false, false);
+                    data[winner].update({color: '#03fc4e'}, false, false, false);
+                    const winnerName = participants[winner];
+                    chartComponent.current.chart.title.update({text: winnerName}, false, false, false);
+                    setWinner(winnerName);
                 }
                 chartComponent.current.chart.redraw();
-                if (winner) {
-                    const winnerName = participants[winner];
-                    setWinner(winnerName);
-                    chartComponent.current.chart.title.update({text: winnerName})
-
+                if (winner > -1) {
+                    winner = -1;
                     clearInterval(interval);
                 }
 

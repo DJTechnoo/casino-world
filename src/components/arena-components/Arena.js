@@ -33,13 +33,13 @@ const Arena = () => {
                     highlight={winner}
                     highlightColor=' bg-green-500'
                     color=' bg-yellow-400'
-                    className={'text-black  hover:bg-red-600 rounded-2xl px-4 py-1 hover:cursor-pointer'}
+                    className={'text-black  hover:bg-red-600 rounded-2xl px-4 py-1 hover:cursor-pointer justify-center flex items-center'}
                 />
                 <Tags 
                     name='Prizes' 
                     tags={prizes}
                     setTags={setPrizes}
-                    className='text-black text-4xl bg-cyan-400 rounded-2xl px-4 py-1 hover:cursor-pointer'
+                    className='text-black text-4xl bg-cyan-400 rounded-2xl px-4 py-1 hover:cursor-pointer justify-center flex items-center'
                 />
             </div>
     </div>
