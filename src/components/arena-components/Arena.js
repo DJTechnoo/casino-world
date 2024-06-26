@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Tags from "../Tags";
 import PlayButton from "../PlayButton";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import HorseRace from "./games/HorseRace";
 import BlackJack from "./games/BlackJack";
+import ShareButton from "../ShareButton";
 
 const Arena = () => {
 
@@ -11,20 +12,44 @@ const Arena = () => {
     const [prizes, setPrizes] = useState([]);
     const [play, setPlay] = useState(false);
     const [winner, setWinner] = useState('');
-
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     const clickPlay = () => {
         setPlay(!play);
     }
+    
+    const updateURL = () => {
+        const encodedParticipantsArray = encodeURIComponent(JSON.stringify(participants)),
+        encodedPrizesArray = encodeURIComponent(JSON.stringify(prizes));
+        navigate(`/?participants=${encodedParticipantsArray}&prizes=${encodedPrizesArray}`);
+    }
+    
+    // If get the params in the url for participants and prizes
+    // then update both states. Yields a dependency warning, but can be safely ignored.
+    useEffect(() => {
+        debugger;
+        const params = new URLSearchParams(location.search);
+        const participantsParam = params.get('participants');
+        const prizesParam = params.get('prizes');
+        const participantsArray = participantsParam ? JSON.parse(decodeURIComponent(participantsParam)) : [];
+        const prizesArray = prizesParam ? JSON.parse(decodeURIComponent(prizesParam)) : [];
+        setParticipants(participantsArray);
+        setPrizes(prizesArray);
+    }, [])
 
     return <div className='text-white w-auto flex flex-col'>
-            <Routes>
-                <Route
-                    path='/horse-race'
-                    element={<HorseRace participants={participants} play={play} setPlay={setPlay} setWinner={setWinner}/>} 
-                />
-                <Route path='/black-jack' element={<BlackJack/>} />
-            </Routes>
+            <div className='flex flex-row'>
+                <Routes>
+                    <Route
+                        path='/horse-race'
+                        element={<HorseRace participants={participants} play={play} setPlay={setPlay} setWinner={setWinner}/>} 
+                        />
+                    <Route path='/black-jack' element={<BlackJack/>} />
+                </Routes>
+            </div>
             <PlayButton play={play} clickPlay={clickPlay}/>
+            <ShareButton name='Share' click={updateURL}/>
             <div className='flex space-x-12'>
                 <Tags 
                     name='Participants'

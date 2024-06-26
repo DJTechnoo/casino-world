@@ -83,7 +83,7 @@ const HorseRace = ({participants, play, setWinner}) => {
         chart: {
             backgroundColor: 'rgba(0, 0, 0, 0)',
             width: 1000,
-            height: '60%',
+            height: '50%',
             type: 'bar',
             animation: {
                 duration: animationSpd,
