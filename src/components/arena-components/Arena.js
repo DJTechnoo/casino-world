@@ -28,12 +28,11 @@ const Arena = () => {
     // If get the params in the url for participants and prizes
     // then update both states. Yields a dependency warning, but can be safely ignored.
     useEffect(() => {
-        debugger;
-        const params = new URLSearchParams(location.search);
-        const participantsParam = params.get('participants');
-        const prizesParam = params.get('prizes');
-        const participantsArray = participantsParam ? JSON.parse(decodeURIComponent(participantsParam)) : [];
-        const prizesArray = prizesParam ? JSON.parse(decodeURIComponent(prizesParam)) : [];
+        const params = new URLSearchParams(location.search),
+            participantsParam = params.get('participants'),
+            prizesParam = params.get('prizes'),
+            participantsArray = participantsParam ? JSON.parse(decodeURIComponent(participantsParam)) : [],
+            prizesArray = prizesParam ? JSON.parse(decodeURIComponent(prizesParam)) : [];
         setParticipants(participantsArray);
         setPrizes(prizesArray);
     }, [])
@@ -43,13 +42,19 @@ const Arena = () => {
                 <Routes>
                     <Route
                         path='/horse-race'
-                        element={<HorseRace participants={participants} play={play} setPlay={setPlay} setWinner={setWinner}/>} 
-                        />
+                        element={<HorseRace
+                            participants={participants}
+                            play={play} setPlay={setPlay} 
+                            setWinner={setWinner}
+                        />}
+                    />
                     <Route path='/black-jack' element={<BlackJack/>} />
                 </Routes>
             </div>
-            <PlayButton play={play} clickPlay={clickPlay}/>
-            <ShareButton name='Share' click={updateURL}/>
+            <div className='flex space-x-3'>
+                <PlayButton play={play} clickPlay={clickPlay}/>
+                <ShareButton name='Share' click={updateURL}/>
+            </div>
             <div className='flex space-x-12'>
                 <Tags 
                     name='Participants'
