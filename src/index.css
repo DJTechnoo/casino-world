@@ -4,6 +4,6 @@
 
 @layer base {
   html {
-      @apply bg-slate-950;
+      @apply bg-blue-950;
   }
 }

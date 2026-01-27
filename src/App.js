@@ -7,7 +7,7 @@ function App() {
 
     return (
         <HashRouter>
-            <div className='flex'>
+            <div className='flex mt-4'>
                 <Menu/>
                 <Arena/>
             </div>

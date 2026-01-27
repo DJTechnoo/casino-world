@@ -34,7 +34,7 @@ const Tags = (props) => {
         <h1 className='text-white'>{props.name}</h1>
         <input className='text-black' value={tag} onChange={onChangeHandler} onKeyDown={onKeyDownHandler}/>
         {props.tags.length?
-        (<div className=' mt-2 flex flex-wrap items-center p-3 space-x-1 space-y-1 bg-zinc-800 rounded-lg w-96' >
+        (<div className=' mt-2 flex flex-wrap items-center p-3 space-x-1 space-y-1 rounded-lg w-96' >
             {props.tags.map((tag, i) => {
                 return <h1 onClick={() => {removeTag(i)}} className={props.className + (props.highlight == tag? definedColor(props.highlightColor): definedColor(props.color))}>{tag}</h1>
             })}

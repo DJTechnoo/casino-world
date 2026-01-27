@@ -5,18 +5,18 @@ import { useRef, useEffect, memo } from 'react';
 const HorseRace = ({participants, play, setWinner}) => {
     const chartComponent = useRef(null),
         finishLine = 1000000,
-        animationSpd = 500;
+        animationSpd = 400;
     let labelWidth = 16;
 
     useEffect(() => {
         if (!play) {
             return;
         }
-        const boostInterval = 6;
+        const boostInterval = 3;
         let boostCounter = -1,
             luckyOne = -1,
             boostAmount = 0,
-            boostPower = 0.4,
+            boostPower = 1.0,
             candidateIndices = [],
             selectWinner = false,
             winner = -1;
@@ -27,15 +27,15 @@ const HorseRace = ({participants, play, setWinner}) => {
                 if(boostCounter == boostInterval) {
                     luckyOne = Math.floor(Math.random() * data.length);
                     boostCounter = 0;
-                    boostAmount = 3 + Math.floor(Math.random()*8);
-                    data[luckyOne].update({color: 'red'}, false, false, false);
+                    boostAmount = 2 + Math.floor(Math.random()*2);
+                    data[luckyOne].update({color: '#ffa3ff'}, false, false, false);
                 }
 
                 if (!selectWinner) {
                     if (boostAmount) {
                         boostAmount--;
                         if (boostAmount == 0) {
-                            data[luckyOne].update({color: '#fc0384'}, false, false, false);
+                            data[luckyOne].update({color: '#bfff00'}, false, false, false);
                         }
                         data[luckyOne].update(data[luckyOne].y *= 1 + boostPower * Math.random(), false, false, false);
                     } else {
@@ -57,7 +57,7 @@ const HorseRace = ({participants, play, setWinner}) => {
                             winner = candidateIndices[i];
                         }
                     }
-                    data[luckyOne].update({color: '#fc0384'}, false, false, false);
+                    data[luckyOne].update({color: '#bfff00'}, false, false, false);
                     data[winner].update({color: '#03fc4e'}, false, false, false);
                     const winnerName = participants[winner];
                     chartComponent.current.chart.title.update({text: winnerName}, false, false, false);
@@ -83,7 +83,7 @@ const HorseRace = ({participants, play, setWinner}) => {
         chart: {
             backgroundColor: 'rgba(0, 0, 0, 0)',
             width: 1000,
-            height: '50%',
+            height: '70%',
             type: 'bar',
             animation: {
                 duration: animationSpd,
@@ -129,16 +129,26 @@ const HorseRace = ({participants, play, setWinner}) => {
                 }
             },
             title: {
-                text: ''
+                text: '',
+                style: {
+                    color: 'red'
+                }
             },
             plotBands: [{
-                color: 'rgba(252, 3, 132, 0.2)',
+                color: 'rgba(252, 255, 255, 0.4)',
                 from: finishLine,
-                to: finishLine* 2
+                to: finishLine * 2
+            }, {
+                color: 'rgba(252, 255, 255, 1)',
+                from: finishLine,
+                to: finishLine * 1.01
             }]
         },
         title: {
-            text: 'HORSE RACE'
+            text: 'HORSE RACE',
+            style: {
+                color: 'white'
+            }
         },
 
         series: [{
@@ -146,7 +156,7 @@ const HorseRace = ({participants, play, setWinner}) => {
             pointPadding: 0.05,
             borderWidth: 0,
             borderRadius: 30,
-            color: '#fc0384',
+            color: '#bfff00',
             data: participants.map(() => 40)
 
         }]
