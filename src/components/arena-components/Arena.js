@@ -3,8 +3,9 @@ import Tags from "../Tags";
 import PlayButton from "../PlayButton";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import HorseRace from "./games/HorseRace";
-import BlackJack from "./games/BlackJack";
+import WheelOfFortune from "./games/WheelOfFortune";
 import ShareButton from "../ShareButton";
+import DeathMatch from "./games/DeathMatch";
 
 const Arena = () => {
 
@@ -48,7 +49,22 @@ const Arena = () => {
                             setWinner={setWinner}
                         />}
                     />
-                    <Route path='/black-jack' element={<BlackJack/>} />
+                    <Route 
+                        path='/wheel-of-fortune' 
+                        element={<WheelOfFortune
+                            participants={participants}
+                            play={play} setPlay={setPlay} 
+                            setWinner={setWinner}
+                        />}
+                    />
+                    <Route 
+                        path='/deathmatch' 
+                        element={<DeathMatch
+                            participants={participants}
+                            play={play} setPlay={setPlay} 
+                            setWinner={setWinner}
+                        />}
+                    />
                 </Routes>
             </div>
             <div className='flex space-x-3'>
