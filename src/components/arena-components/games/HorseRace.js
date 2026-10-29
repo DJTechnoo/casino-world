@@ -35,7 +35,7 @@ const HorseRace = ({participants, play, setWinner}) => {
                     if (boostAmount) {
                         boostAmount--;
                         if (boostAmount == 0) {
-                            data[luckyOne].update({color: '#bfff00'}, false, false, false);
+                            data[luckyOne].update({color: '#4562cc'}, false, false, false);
                         }
                         data[luckyOne].update(data[luckyOne].y *= 1 + boostPower * Math.random(), false, false, false);
                     } else {
@@ -57,7 +57,7 @@ const HorseRace = ({participants, play, setWinner}) => {
                             winner = candidateIndices[i];
                         }
                     }
-                    data[luckyOne].update({color: '#bfff00'}, false, false, false);
+                    data[luckyOne].update({color: '#e400cc'}, false, false, false);
                     data[winner].update({color: '#03fc4e'}, false, false, false);
                     const winnerName = participants[winner];
                     chartComponent.current.chart.title.update({text: winnerName}, false, false, false);
@@ -158,7 +158,7 @@ const HorseRace = ({participants, play, setWinner}) => {
             pointPadding: 0.05,
             borderWidth: 0,
             borderRadius: 30,
-            color: '#bfff00',
+            color: '#4562cc',
             data: participants.map(() => 40)
 
         }]
