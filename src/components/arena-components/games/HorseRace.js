@@ -99,6 +99,8 @@ const HorseRace = ({participants, play, setWinner}) => {
             enabled: false
         },
 
+        tooltip: false,
+
         plotOptions: {
             series: {
                 dataLabels: {

@@ -4,10 +4,84 @@ import { useRef, useEffect, memo } from 'react';
 
 const WheelOfFortune = ({participants, play, setWinner}) => {
 
+    (({ merge, wrap }) => {
+
+    wrap(
+        Highcharts.seriesTypes.pie.prototype,
+        'getDataLabelPosition',
+        function (proceed, point, distance) {
+            const pos = proceed.apply(this, Array.prototype.slice.call(arguments, 1));
+
+            if (this.options.dataLabels.rotationMode === 'perpendicular') {
+                pos.alignment = 'left';
+            }
+            return pos;
+        }
+    );
+
+    // Wrap the placeDataLabels method to apply the rotation mode
+    wrap(
+        Highcharts.seriesTypes.pie.prototype,
+        'placeDataLabels',
+        function (proceed) {
+            const seriesDLOptions = this.options.dataLabels;
+
+            // Call the original placeDataLabels method
+            proceed.apply(this);
+
+            // Apply rotation mode if specified
+            for (const point of this.points) {
+                for (const dataLabel  of point.dataLabels || []) {
+                    const options = merge(seriesDLOptions, dataLabel.options);
+                    if (options.rotationMode === 'perpendicular') {
+                        const radius = this.center[2] / 2,
+                            vertical = options.style.writingMode === 'vertical-rl',
+                            halfHeight = vertical ? 0 : this.chart.renderer.fontMetrics(dataLabel).h / 2,
+                            attr = {
+                                x: this.center[0] - radius - options.distance,
+                                y: this.center[1] - halfHeight,
+                                rotationOriginX: radius + options.distance,
+                                rotationOriginY: halfHeight,
+                                rotation: point.angle * (180 / Math.PI) + 180
+                            };
+
+                        // Avoid animating from far side of the circle
+                        if (typeof dataLabel.rotation === 'number') {
+                            if (attr.rotation > dataLabel.rotation + 180) {
+                                attr.rotation -= 360;
+                            } else if (attr.rotation < dataLabel.rotation - 180) {
+                                attr.rotation += 360;
+                            }
+                        }
+
+                        if (options.style.writingMode === 'vertical-rl') {
+                            attr.x = this.center[0];
+                            attr.y = this.center[1] - radius + options.distance;
+                            attr.rotationOriginX = 0;
+                            attr.rotationOriginY = radius - options.distance;                                
+                            attr.rotation -= 90;
+                        }
+                
+                        dataLabel[
+                            dataLabel.placedPerpendicular ? 'animate' : 'attr'
+                        ](attr);
+
+                        dataLabel.placedPerpendicular = true;
+
+                    }
+                }
+            }
+        }
+    );
+
+})(Highcharts);
+
     const chartComponent = useRef(null),
         animationSpd = 10;
     let currentWinner = -1,
         foundPossibleWinner = false;
+
+    Highcharts.setOptions({colors: ['#ffd319', '#ff2975', '#c700b5','#ff901f', '#b000ff']})
 
     let physics = {
         force: 0,
@@ -56,7 +130,7 @@ const WheelOfFortune = ({participants, play, setWinner}) => {
         chart.renderer.path([
             ['M', chart.chartWidth / 2 - 10, chart.plotTop],
             ['L', chart.chartWidth / 2 + 10, chart.plotTop],
-            ['L', chart.chartWidth / 2, chart.plotTop + 30],
+            ['L', chart.chartWidth / 2, chart.plotTop + 40],
             ['Z']
         ])
         .attr({
@@ -115,9 +189,7 @@ const WheelOfFortune = ({participants, play, setWinner}) => {
                         if (currentWinner ==  nextWinner) {
                             const winnerName = chart.series[0].data[currentWinner].name;
                             chart.series[0].data[currentWinner].update({sliced: true});
-                            chart.setTitle({
-                                text: 'The winner is ' + winnerName + '!'
-                            });
+
                             setWinner(winnerName);
 
                         } else {
@@ -149,26 +221,34 @@ const WheelOfFortune = ({participants, play, setWinner}) => {
         },
 
         title: {
-            text: 'Lykkehjulet'
+            text: ''
         },
 
         plotOptions: {
-            pie: {
-                size: 600,
-                slicedOffset: 30,
-                borderWidth: 0,
-                dataLabels: {
-                    color: '#FFFFFF'
-                },
-                
-            }
-        },
+        pie: {
+            size: 600,
+            //slicedOffset: 30,
+            borderWidth: 0,
+            dataLabels: {
+                allowOverlap: true,
+                //align: 'left',
+                // backgroundColor: 'contrast',
+                //distance: -5,
+                rotationMode: 'perpendicular', // Plugin option
+                style: {
+                    fontSize: '1em',
+                    textOutline: 'none'
+                }
+            },
+            innerSize: '10%'
+        }
+    },
 
+        tooltip: {
+            enabled: false
+        },
         series: [{
             type: 'pie',
-            tooltip: {
-                enabled: false
-            },
             data: participants.map(i => ({ name: i, y: 40 })),
             dataLabels: {
             style: {
